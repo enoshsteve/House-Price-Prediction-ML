@@ -129,7 +129,7 @@ House-Price-Prediction-ML/
 ├── README.md
 └── home.jpg
 
-## 📌 Description
+📌 Description
 app/ → Flask web application
 dataset/ → House price dataset
 model/ → Trained Machine Learning model
@@ -139,4 +139,4 @@ save_model.py → Saves the trained model
 test_prediction.py → Tests predictions
 check_prices.py → Checks house price data
 requirements.txt → Python dependencies
-home.jpg → Project screenshot
+home.jpg → Project screensho
