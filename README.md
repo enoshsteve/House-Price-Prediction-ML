@@ -56,6 +56,27 @@ House Price Prediction
         ↓
 Flask Web Application
 
+## 📊 Model Performance
+
+The models were evaluated using R² Score, Mean Absolute Error (MAE), and Root Mean Squared Error (RMSE).
+
+| Model | R² Score | MAE | RMSE |
+|---|---:|---:|---:|
+| Linear Regression | 0.7215 | $124,105.15 | $212,029.11 |
+| Decision Tree | 0.5789 | $144,647.37 | $260,710.90 |
+| Random Forest | 0.6995 | $113,697.28 | $220,232.30 |
+| Gradient Boosting | 0.7165 | $115,509.80 | $213,912.58 |
+
+### 🏆 Best Model
+
+**Linear Regression**
+
+- R² Score: **0.7215**
+- MAE: **$124,105.15**
+- RMSE: **$212,029.11**
+
+The Linear Regression model achieved the highest R² score and was selected as the best-performing model for the final house price prediction.
+
 ## 📸 Project Screenshot
 
 ![House Price Prediction App](home.jpg)
