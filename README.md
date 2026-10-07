@@ -104,7 +104,10 @@ python app\app.py
 
 http://127.0.0.1:5000
 
-## 📁 Project Structure
+
+So GitHub editor-la visually இப்படித்தான் இருக்கணும்:
+
+**Project Structure**
 
 House-Price-Prediction-ML/
 │
@@ -128,15 +131,3 @@ House-Price-Prediction-ML/
 ├── requirements.txt
 ├── README.md
 └── home.jpg
-
-📌 Description
-app/ → Flask web application
-dataset/ → House price dataset
-model/ → Trained Machine Learning model
-notebooks/ → Jupyter notebooks
-train_model.py → Trains and evaluates ML models
-save_model.py → Saves the trained model
-test_prediction.py → Tests predictions
-check_prices.py → Checks house price data
-requirements.txt → Python dependencies
-home.jpg → Project screensho
