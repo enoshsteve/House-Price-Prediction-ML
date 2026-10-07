@@ -104,35 +104,28 @@ python app\app.py
 
 http://127.0.0.1:5000
 
-### Project Structure
+## 📁 Project Structure
 
-House-Price-Prediction-ML/
-│
-├── app/
-│   ├── app.py
-│   ├── save_model.py
-│   └── templates/
-│
-├── dataset/
-│   └── house_prices.csv
-│
-├── model/
-│   └── house_price_model.pkl
-│
-├── notebooks/
-│
-├── train_model.py
-├── save_model.py
-├── test_prediction.py
-├── check_prices.py
-├── requirements.txt
-├── README.md
-└── home.jpg
+- 📂 `app/`
+  - `app.py` — Flask web application
+  - `save_model.py` — Model saving utility
+  - `templates/` — HTML templates
 
-### Description
+- 📂 `dataset/`
+  - `house_prices.csv` — House price dataset
 
-app/ → Flask web application
-dataset/ → House price dataset
+- 📂 `model/`
+  - `house_price_model.pkl` — Trained ML model
+
+- 📂 `notebooks/` — Jupyter notebooks
+
+- 📄 `train_model.py` — Trains and evaluates ML models
+- 📄 `save_model.py` — Saves the trained model
+- 📄 `test_prediction.py` — Tests predictions
+- 📄 `check_prices.py` — Checks house price data
+- 📄 `requirements.txt` — Python dependencies
+- 📄 `README.md` — Project documentation
+- 🖼️ `home.jpg` — Project screenshot
 model/ → Trained Machine Learning model
 train_model.py → Trains and evaluates ML models
 requirements.txt → Python dependencies
