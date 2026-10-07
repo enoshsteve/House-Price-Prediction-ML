@@ -40,7 +40,6 @@ The models are trained and evaluated, and the best-performing model is selected 
 
 ## 🔄 Machine Learning Workflow
 
-```text
 House Price Dataset
         ↓
 Data Preprocessing
