@@ -27,6 +27,36 @@ The project also includes a Flask web application where users can interact with 
 - HTML/CSS
 - Jupyter Notebook
 
+## 🤖 Machine Learning Models
+
+This project evaluates multiple Machine Learning regression algorithms:
+
+- 📈 Linear Regression
+- 🌳 Decision Tree Regressor
+- 🌲 Random Forest Regressor
+- 🚀 Gradient Boosting Regressor
+
+The models are trained and evaluated, and the best-performing model is selected for house price prediction.
+
+## 🔄 Machine Learning Workflow
+
+```text
+House Price Dataset
+        ↓
+Data Preprocessing
+        ↓
+Feature Selection
+        ↓
+Train Multiple Models
+        ↓
+Model Evaluation
+        ↓
+Select Best Model
+        ↓
+House Price Prediction
+        ↓
+Flask Web Application
+
 ## 📸 Project Screenshot
 
 ![House Price Prediction App](home.jpg)
