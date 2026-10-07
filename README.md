@@ -126,6 +126,3 @@ http://127.0.0.1:5000
 - 📄 `requirements.txt` — Python dependencies
 - 📄 `README.md` — Project documentation
 - 🖼️ `home.jpg` — Project screenshot
-model/ → Trained Machine Learning model
-train_model.py → Trains and evaluates ML models
-requirements.txt → Python dependencies
