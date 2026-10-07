@@ -103,3 +103,40 @@ python app\app.py
 ### 5. Open in browser
 
 http://127.0.0.1:5000
+
+## 📁 Project Structure
+
+House-Price-Prediction-ML/
+│
+├── app/
+│   ├── app.py
+│   ├── save_model.py
+│   └── templates/
+│
+├── dataset/
+│   └── house_prices.csv
+│
+├── model/
+│   └── house_price_model.pkl
+│
+├── notebooks/
+│
+├── train_model.py
+├── save_model.py
+├── test_prediction.py
+├── check_prices.py
+├── requirements.txt
+├── README.md
+└── home.jpg
+
+📌 Description
+app/ → Flask web application
+dataset/ → House price dataset
+model/ → Trained Machine Learning model
+notebooks/ → Jupyter notebooks
+train_model.py → Trains and evaluates ML models
+save_model.py → Saves the trained model
+test_prediction.py → Tests predictions
+check_prices.py → Checks house price data
+requirements.txt → Python dependencies
+home.jpg → Project screenshot
