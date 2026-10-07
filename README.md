@@ -129,7 +129,7 @@ House-Price-Prediction-ML/
 ├── README.md
 └── home.jpg
 
-📌 Description
+## 📌 Description
 app/ → Flask web application
 dataset/ → House price dataset
 model/ → Trained Machine Learning model
