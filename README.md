@@ -104,7 +104,7 @@ python app\app.py
 
 http://127.0.0.1:5000
 
-###Project Structure
+### Project Structure
 
 House-Price-Prediction-ML/
 │
@@ -129,7 +129,7 @@ House-Price-Prediction-ML/
 ├── README.md
 └── home.jpg
 
-###Description
+### Description
 
 app/ → Flask web application
 dataset/ → House price dataset
