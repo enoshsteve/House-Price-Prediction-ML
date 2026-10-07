@@ -77,6 +77,52 @@ The models were evaluated using R² Score, Mean Absolute Error (MAE), and Root M
 
 The Linear Regression model achieved the highest R² score and was selected as the best-performing model for the final house price prediction.
 
+## ▶️ How to Run
+
+### 1. Clone the repository
+
+git clone https://github.com/enoshsteve/House-Price-Prediction-ML.git
+
+### 2. Open the project
+
+cd House-Price-Prediction-ML
+
+### 3. Install dependencies
+
+pip install -r requirements.txt
+
+### 4. Run the Flask application
+
+python app\app.py
+
+### 5. Open in browser
+
+http://127.0.0.1:5000
+
+## 📁 Project Structure
+
+- 📂 `app/`
+  - `app.py` — Flask web application
+  - `save_model.py` — Model saving utility
+  - `templates/` — HTML templates
+
+- 📂 `dataset/`
+  - `house_prices.csv` — House price dataset
+
+- 📂 `model/`
+  - `house_price_model.pkl` — Trained ML model
+
+- 📂 `notebooks/` — Jupyter notebooks
+
+- 📄 `train_model.py` — Trains and evaluates ML models
+- 📄 `save_model.py` — Saves the trained model
+- 📄 `test_prediction.py` — Tests predictions
+- 📄 `check_prices.py` — Checks house price data
+- 📄 `requirements.txt` — Python dependencies
+- 📄 `README.md` — Project documentation
+- 🖼️ `home.jpg` — Project screenshot
+
+
 ## 📸 Project Screenshot
 
 ![House Price Prediction App](home.jpg)
