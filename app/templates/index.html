@@ -1,0 +1,1247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>House Price Predictor</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: linear-gradient(135deg, #07152f, #0b2d5c, #07152f);
+            color: white;
+            min-height: 100vh;
+        }
+
+        header {
+            padding: 22px 7%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.25);
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(15px);
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .logo span,
+        .hero span {
+            color: #4da6ff;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin-left: 22px;
+            font-size: 14px;
+        }
+
+        nav a:hover {
+            color: #4da6ff;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1400px;
+            margin: auto;
+        }
+
+        .hero {
+            text-align: center;
+            padding: 65px 20px 40px;
+        }
+
+        .hero h1 {
+            font-size: 46px;
+            margin-bottom: 15px;
+        }
+
+        .hero p {
+            color: #b8c7dd;
+            font-size: 17px;
+        }
+
+        .section-card {
+            background: rgba(255,255,255,0.07);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            backdrop-filter: blur(10px);
+        }
+
+        .section-title {
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+
+        .section-subtitle {
+            color: #aebed5;
+            margin-bottom: 25px;
+            font-size: 14px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 18px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 7px;
+            color: #c8d5e8;
+            font-size: 13px;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 13px;
+            border-radius: 10px;
+            border: 1px solid rgba(255,255,255,0.15);
+            background: rgba(0,0,0,0.25);
+            color: white;
+            outline: none;
+        }
+
+        input:focus,
+        select:focus {
+            border-color: #4da6ff;
+        }
+
+        select option {
+            color: black;
+        }
+
+        .button-row {
+            margin-top: 25px;
+            display: flex;
+            gap: 12px;
+        }
+
+        button {
+            padding: 13px 25px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .predict-btn {
+            background: #1677ff;
+            color: white;
+        }
+
+        .predict-btn:hover {
+            background: #005edb;
+        }
+
+        .reset-btn {
+            background: rgba(255,255,255,0.1);
+            color: white;
+        }
+
+        #result {
+            display: none;
+            margin-top: 25px;
+            padding: 25px;
+            border-radius: 15px;
+            background: linear-gradient(135deg, #0b5ed7, #1689ff);
+            text-align: center;
+        }
+
+        #predictedPrice {
+            font-size: 38px;
+            font-weight: bold;
+            margin-top: 8px;
+        }
+
+        .info-grid,
+        .dashboard-grid,
+        .analytics-summary {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 18px;
+        }
+
+        .info-card,
+        .metric-card,
+        .summary-card {
+            padding: 22px;
+            border-radius: 15px;
+            background: rgba(255,255,255,0.06);
+        }
+
+        .info-card {
+            text-align: center;
+        }
+
+        .info-card h3,
+        .metric-card .value,
+        .summary-value {
+            color: #4da6ff;
+        }
+
+        .info-card p,
+        .metric-card h4,
+        .summary-card h4 {
+            color: #c3d0e2;
+            margin-top: 8px;
+        }
+
+        .dashboard-grid {
+            grid-template-columns: repeat(4, 1fr);
+            margin-bottom: 25px;
+        }
+
+        .metric-card .value {
+            font-size: 22px;
+            font-weight: bold;
+        }
+
+        .model-table,
+        .history-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .model-table th,
+        .model-table td,
+        .history-table th,
+        .history-table td {
+            padding: 13px;
+            text-align: left;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+        }
+
+        th {
+            color: #4da6ff;
+        }
+
+        .best {
+            color: #4ade80;
+            font-weight: bold;
+        }
+
+        .strong {
+            color: #60a5fa;
+            font-weight: bold;
+        }
+
+        .good {
+            color: #facc15;
+            font-weight: bold;
+        }
+
+        .lower {
+            color: #fb7185;
+            font-weight: bold;
+        }
+
+        .best-model {
+            margin-top: 25px;
+            padding: 20px;
+            border-radius: 15px;
+            background: rgba(34,197,94,0.1);
+            border: 1px solid rgba(34,197,94,0.25);
+        }
+
+        .best-model-name {
+            color: #4ade80;
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .history-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .clear-btn {
+            background: #dc3545;
+            color: white;
+        }
+
+        .empty-history {
+            text-align: center;
+            color: #8999af;
+            padding: 30px;
+        }
+
+        .analytics-summary {
+            grid-template-columns: repeat(4, 1fr);
+            margin-bottom: 25px;
+        }
+
+        .summary-value {
+            font-size: 23px;
+            font-weight: bold;
+        }
+
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 22px;
+        }
+
+        .chart-card {
+            background: rgba(0,0,0,0.18);
+            border-radius: 16px;
+            padding: 20px;
+            min-height: 380px;
+        }
+
+        .chart-card.full {
+            grid-column: span 2;
+        }
+
+        .chart-card h3 {
+            margin-bottom: 15px;
+        }
+
+        .chart-wrapper {
+            height: 300px;
+            position: relative;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #9fb0c7;
+        }
+
+        .analytics-error {
+            display: none;
+            padding: 20px;
+            border-radius: 12px;
+            background: rgba(220,53,69,0.15);
+            color: #ff9ca7;
+            text-align: center;
+        }
+
+        footer {
+            text-align: center;
+            padding: 35px;
+            color: #7f91aa;
+            font-size: 13px;
+        }
+
+        @media (max-width: 1000px) {
+            .form-grid,
+            .info-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .dashboard-grid,
+            .analytics-summary {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .charts-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .chart-card.full {
+                grid-column: span 1;
+            }
+        }
+
+        @media (max-width: 650px) {
+            header {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            nav a {
+                margin: 0 7px;
+            }
+
+            .hero h1 {
+                font-size: 34px;
+            }
+
+            .form-grid,
+            .info-grid,
+            .dashboard-grid,
+            .analytics-summary {
+                grid-template-columns: 1fr;
+            }
+
+            .section-card {
+                padding: 20px;
+            }
+
+            .button-row {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <div class="logo">🏠 <span>House Price</span> Predictor</div>
+
+    <nav>
+        <a href="#predictor">Predict</a>
+        <a href="#history">History</a>
+        <a href="#performance">Models</a>
+        <a href="#analytics">Analytics</a>
+    </nav>
+</header>
+
+<section class="hero">
+    <h1>House Price <span>Prediction</span></h1>
+    <p>Machine Learning powered house price prediction and data analytics</p>
+</section>
+
+<div class="container">
+
+<section class="section-card" id="predictor">
+
+    <h2 class="section-title">🏠 Predict House Price</h2>
+    <p class="section-subtitle">
+        Enter the property details to estimate its market price.
+    </p>
+
+    <form id="predictionForm">
+
+        <div class="form-grid">
+
+            <div class="form-group">
+                <label>Bedrooms</label>
+                <input type="number" id="bedrooms" value="3" min="0" required>
+            </div>
+
+            <div class="form-group">
+                <label>Bathrooms</label>
+                <input type="number" id="bathrooms" value="2" step="0.5" min="0" required>
+            </div>
+
+            <div class="form-group">
+                <label>Living Area (sqft)</label>
+                <input type="number" id="sqft_living" value="1800" required>
+            </div>
+
+            <div class="form-group">
+                <label>Lot Area (sqft)</label>
+                <input type="number" id="sqft_lot" value="5000" required>
+            </div>
+
+            <div class="form-group">
+                <label>Floors</label>
+                <input type="number" id="floors" value="1" step="0.5" required>
+            </div>
+
+            <div class="form-group">
+                <label>Waterfront</label>
+                <select id="waterfront">
+                    <option value="0">No</option>
+                    <option value="1">Yes</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>View Rating</label>
+                <input type="number" id="view" value="0" min="0" max="4" required>
+            </div>
+
+            <div class="form-group">
+                <label>Condition</label>
+                <input type="number" id="condition" value="3" min="1" max="5" required>
+            </div>
+
+            <div class="form-group">
+                <label>Above Ground Area</label>
+                <input type="number" id="sqft_above" value="1800" required>
+            </div>
+
+            <div class="form-group">
+                <label>Basement Area</label>
+                <input type="number" id="sqft_basement" value="0" required>
+            </div>
+
+            <div class="form-group">
+                <label>Year Built</label>
+                <input type="number" id="yr_built" value="2000" required>
+            </div>
+
+            <div class="form-group">
+                <label>Year Renovated</label>
+                <input type="number" id="yr_renovated" value="0" required>
+            </div>
+
+            <div class="form-group">
+                <label>City</label>
+                <select id="city">
+                    <option>Seattle</option>
+                    <option>Bellevue</option>
+                    <option>Redmond</option>
+                    <option>Kent</option>
+                    <option>Shoreline</option>
+                    <option>Sammamish</option>
+                    <option>Mercer Island</option>
+                    <option>Newcastle</option>
+                    <option>Medina</option>
+                    <option>Clyde Hill</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>State ZIP</label>
+                <input type="text" id="statezip" value="WA 98103" required>
+            </div>
+
+        </div>
+
+        <div class="button-row">
+            <button type="button" class="predict-btn" onclick="predictPrice()">
+                🔮 Predict Price
+            </button>
+
+            <button type="button" class="reset-btn" onclick="resetForm()">
+                🔄 Reset
+            </button>
+        </div>
+
+    </form>
+
+    <div id="result">
+        <h3>Estimated House Price</h3>
+        <div id="predictedPrice">$0</div>
+    </div>
+
+</section>
+
+<section class="section-card">
+
+    <h2 class="section-title">🤖 Model Information</h2>
+
+    <p class="section-subtitle">
+        Details about the machine learning system.
+    </p>
+
+    <div class="info-grid">
+
+        <div class="info-card">
+            <h3>Machine Learning</h3>
+            <p>Linear Regression</p>
+        </div>
+
+        <div class="info-card">
+            <h3>Model R² Score</h3>
+            <p>72.15%</p>
+        </div>
+
+        <div class="info-card">
+            <h3>Dataset</h3>
+            <p>4,549 Valid Houses</p>
+        </div>
+
+    </div>
+
+</section>
+
+<section class="section-card" id="history">
+
+    <div class="history-header">
+        <div>
+            <h2 class="section-title">🕘 Prediction History</h2>
+            <p class="section-subtitle">
+                Recent predictions stored in this browser.
+            </p>
+        </div>
+
+        <button class="clear-btn" onclick="clearHistory()">
+            Clear History
+        </button>
+    </div>
+
+    <div id="historyContent" class="empty-history">
+        No predictions yet.
+    </div>
+
+</section>
+
+<section class="section-card" id="performance">
+
+    <h2 class="section-title">📈 Model Performance Dashboard</h2>
+
+    <p class="section-subtitle">
+        Comparison of machine learning models used during training.
+    </p>
+
+    <div class="dashboard-grid">
+
+        <div class="metric-card">
+            <h4>Best Model</h4>
+            <div class="value">Linear Regression</div>
+        </div>
+
+        <div class="metric-card">
+            <h4>Best R² Score</h4>
+            <div class="value">72.15%</div>
+        </div>
+
+        <div class="metric-card">
+            <h4>Lowest RMSE</h4>
+            <div class="value">$212,029</div>
+        </div>
+
+        <div class="metric-card">
+            <h4>Training Houses</h4>
+            <div class="value">4,549</div>
+        </div>
+
+    </div>
+
+    <div style="overflow-x:auto;">
+
+        <table class="model-table">
+
+            <thead>
+                <tr>
+                    <th>Model</th>
+                    <th>R² Score</th>
+                    <th>MAE</th>
+                    <th>RMSE</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                <tr>
+                    <td>Linear Regression</td>
+                    <td>72.15%</td>
+                    <td>$124,105</td>
+                    <td>$212,029</td>
+                    <td class="best">Best</td>
+                </tr>
+
+                <tr>
+                    <td>Gradient Boosting</td>
+                    <td>71.65%</td>
+                    <td>$115,510</td>
+                    <td>$213,913</td>
+                    <td class="strong">Strong</td>
+                </tr>
+
+                <tr>
+                    <td>Random Forest</td>
+                    <td>69.95%</td>
+                    <td>$113,697</td>
+                    <td>$220,232</td>
+                    <td class="good">Good</td>
+                </tr>
+
+                <tr>
+                    <td>Decision Tree</td>
+                    <td>57.89%</td>
+                    <td>$144,647</td>
+                    <td>$260,711</td>
+                    <td class="lower">Lower</td>
+                </tr>
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+    <div class="best-model">
+
+        <div class="best-model-name">🏆 Linear Regression</div>
+
+        <p>
+            Selected as the primary model because it achieved
+            the highest R² score and lowest RMSE among the tested models.
+        </p>
+
+    </div>
+
+</section>
+
+<section class="section-card" id="analytics">
+
+    <h2 class="section-title">📊 Data Visualization Dashboard</h2>
+
+    <p class="section-subtitle">
+        Explore patterns and relationships in the house price dataset.
+    </p>
+
+    <div id="analyticsLoading" class="loading">
+        ⏳ Loading analytics...
+    </div>
+
+    <div id="analyticsError" class="analytics-error">
+        ❌ Unable to load analytics data.
+    </div>
+
+    <div id="analyticsContent" style="display:none;">
+
+        <div class="analytics-summary">
+
+            <div class="summary-card">
+                <h4>Total Houses</h4>
+                <div class="summary-value" id="totalHouses">-</div>
+            </div>
+
+            <div class="summary-card">
+                <h4>Average Price</h4>
+                <div class="summary-value" id="averagePrice">-</div>
+            </div>
+
+            <div class="summary-card">
+                <h4>Minimum Price</h4>
+                <div class="summary-value" id="minimumPrice">-</div>
+            </div>
+
+            <div class="summary-card">
+                <h4>Maximum Price</h4>
+                <div class="summary-value" id="maximumPrice">-</div>
+            </div>
+
+        </div>
+
+        <div class="charts-grid">
+
+            <div class="chart-card">
+                <h3>💰 Price Distribution</h3>
+                <div class="chart-wrapper">
+                    <canvas id="priceDistributionChart"></canvas>
+                </div>
+            </div>
+
+            <div class="chart-card">
+                <h3>🛏️ Bedrooms vs Average Price</h3>
+                <div class="chart-wrapper">
+                    <canvas id="bedroomsChart"></canvas>
+                </div>
+            </div>
+
+            <div class="chart-card full">
+                <h3>📐 Living Area vs Price</h3>
+                <div class="chart-wrapper">
+                    <canvas id="livingAreaChart"></canvas>
+                </div>
+            </div>
+
+            <div class="chart-card">
+                <h3>🏙️ City-wise Average Price</h3>
+                <div class="chart-wrapper">
+                    <canvas id="cityChart"></canvas>
+                </div>
+            </div>
+
+            <div class="chart-card">
+                <h3>🔗 Feature Correlation</h3>
+                <div class="chart-wrapper">
+                    <canvas id="correlationChart"></canvas>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+</div>
+
+<footer>
+    House Price Prediction using Machine Learning
+    <br>
+    Built with Python • Flask • Scikit-Learn • Chart.js
+</footer>
+
+<script>
+
+function formatCurrency(value) {
+    return new Intl.NumberFormat("en-US", {
+        style: "currency",
+        currency: "USD",
+        maximumFractionDigits: 0
+    }).format(value);
+}
+
+
+/* ================= PREDICTION ================= */
+
+async function predictPrice() {
+
+    const houseData = {
+        bedrooms: Number(document.getElementById("bedrooms").value),
+        bathrooms: Number(document.getElementById("bathrooms").value),
+        sqft_living: Number(document.getElementById("sqft_living").value),
+        sqft_lot: Number(document.getElementById("sqft_lot").value),
+        floors: Number(document.getElementById("floors").value),
+        waterfront: Number(document.getElementById("waterfront").value),
+        view: Number(document.getElementById("view").value),
+        condition: Number(document.getElementById("condition").value),
+        sqft_above: Number(document.getElementById("sqft_above").value),
+        sqft_basement: Number(document.getElementById("sqft_basement").value),
+        yr_built: Number(document.getElementById("yr_built").value),
+        yr_renovated: Number(document.getElementById("yr_renovated").value),
+        city: document.getElementById("city").value,
+        statezip: document.getElementById("statezip").value
+    };
+
+    try {
+
+        const response = await fetch("/predict", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(houseData)
+        });
+
+        const result = await response.json();
+
+        if (!response.ok) {
+            throw new Error(result.error || "Prediction failed");
+        }
+
+        document.getElementById("result").style.display = "block";
+
+        document.getElementById("predictedPrice").textContent =
+            formatCurrency(result.predicted_price);
+
+        savePrediction(houseData, result.predicted_price);
+
+    } catch (error) {
+
+        console.error("Prediction Error:", error);
+
+        alert("Prediction failed. Check the browser console for details.");
+
+    }
+}
+
+
+/* ================= HISTORY ================= */
+
+function savePrediction(house, price) {
+
+    let history =
+        JSON.parse(localStorage.getItem("housePredictionHistory")) || [];
+
+    history.unshift({
+        date: new Date().toLocaleString(),
+        city: house.city,
+        bedrooms: house.bedrooms,
+        sqft: house.sqft_living,
+        price: price
+    });
+
+    history = history.slice(0, 20);
+
+    localStorage.setItem(
+        "housePredictionHistory",
+        JSON.stringify(history)
+    );
+
+    displayHistory();
+}
+
+
+function displayHistory() {
+
+    const container =
+        document.getElementById("historyContent");
+
+    const history =
+        JSON.parse(localStorage.getItem("housePredictionHistory")) || [];
+
+    if (history.length === 0) {
+
+        container.className = "empty-history";
+        container.innerHTML = "No predictions yet.";
+        return;
+    }
+
+    container.className = "";
+    container.innerHTML = `
+        <div style="overflow-x:auto;">
+            <table class="history-table">
+
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>City</th>
+                        <th>Bedrooms</th>
+                        <th>Living Area</th>
+                        <th>Predicted Price</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    ${history.map(item => `
+                        <tr>
+                            <td>${item.date}</td>
+                            <td>${item.city}</td>
+                            <td>${item.bedrooms}</td>
+                            <td>${Number(item.sqft).toLocaleString()} sqft</td>
+                            <td class="best">
+                                ${formatCurrency(item.price)}
+                            </td>
+                        </tr>
+                    `).join("")}
+                </tbody>
+
+            </table>
+        </div>
+    `;
+}
+
+
+function clearHistory() {
+
+    localStorage.removeItem("housePredictionHistory");
+
+    displayHistory();
+}
+
+
+/* ================= RESET ================= */
+
+function resetForm() {
+
+    document.getElementById("predictionForm").reset();
+
+    document.getElementById("bedrooms").value = 3;
+    document.getElementById("bathrooms").value = 2;
+    document.getElementById("sqft_living").value = 1800;
+    document.getElementById("sqft_lot").value = 5000;
+    document.getElementById("floors").value = 1;
+    document.getElementById("waterfront").value = 0;
+    document.getElementById("view").value = 0;
+    document.getElementById("condition").value = 3;
+    document.getElementById("sqft_above").value = 1800;
+    document.getElementById("sqft_basement").value = 0;
+    document.getElementById("yr_built").value = 2000;
+    document.getElementById("yr_renovated").value = 0;
+    document.getElementById("city").value = "Seattle";
+    document.getElementById("statezip").value = "WA 98103";
+
+    document.getElementById("result").style.display = "none";
+}
+
+
+/* ================= ANALYTICS ================= */
+
+async function loadAnalytics() {
+
+    try {
+
+        const response = await fetch("/analytics");
+
+        if (!response.ok) {
+            throw new Error("Analytics request failed");
+        }
+
+        const data = await response.json();
+
+        displayAnalytics(data);
+
+    } catch (error) {
+
+        console.error("Analytics Error:", error);
+
+        document.getElementById("analyticsLoading").style.display = "none";
+        document.getElementById("analyticsError").style.display = "block";
+    }
+}
+
+
+function displayAnalytics(data) {
+
+    document.getElementById("totalHouses").textContent =
+        Number(data.summary.total_houses).toLocaleString();
+
+    document.getElementById("averagePrice").textContent =
+        formatCurrency(data.summary.average_price);
+
+    document.getElementById("minimumPrice").textContent =
+        formatCurrency(data.summary.minimum_price);
+
+    document.getElementById("maximumPrice").textContent =
+        formatCurrency(data.summary.maximum_price);
+
+    document.getElementById("analyticsLoading").style.display = "none";
+    document.getElementById("analyticsContent").style.display = "block";
+
+    createPriceDistributionChart(data.price_distribution);
+    createBedroomsChart(data.bedrooms_vs_price);
+    createLivingAreaChart(data.living_area_vs_price);
+    createCityChart(data.city_average_price);
+    createCorrelationChart(data.feature_correlation);
+}
+
+
+/* ================= CHARTS ================= */
+
+function createPriceDistributionChart(data) {
+
+    new Chart(document.getElementById("priceDistributionChart"), {
+
+        type: "bar",
+
+        data: {
+            labels: data.map(item => item.range),
+
+            datasets: [{
+                label: "Number of Houses",
+                data: data.map(item => item.count)
+            }]
+        },
+
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+
+            scales: {
+                x: {
+                    ticks: {
+                        color: "#b8c7dd",
+                        maxRotation: 45,
+                        minRotation: 45
+                    }
+                },
+
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        color: "#b8c7dd"
+                    }
+                }
+            }
+        }
+    });
+}
+
+
+function createBedroomsChart(data) {
+
+    new Chart(document.getElementById("bedroomsChart"), {
+
+        type: "line",
+
+        data: {
+            labels: data.map(item => item.bedrooms),
+
+            datasets: [{
+                label: "Average Price",
+                data: data.map(item => item.price),
+                tension: 0.3
+            }]
+        },
+
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+
+            scales: {
+                x: {
+                    title: {
+                        display: true,
+                        text: "Bedrooms",
+                        color: "#ffffff"
+                    },
+                    ticks: {
+                        color: "#b8c7dd"
+                    }
+                },
+
+                y: {
+                    ticks: {
+                        color: "#b8c7dd",
+
+                        callback: value =>
+                            formatCurrency(value)
+                    }
+                }
+            }
+        }
+    });
+}
+
+
+function createLivingAreaChart(data) {
+
+    new Chart(document.getElementById("livingAreaChart"), {
+
+        type: "scatter",
+
+        data: {
+
+            datasets: [{
+                label: "House Price",
+
+                data: data.map(item => ({
+                    x: item.sqft,
+                    y: item.price
+                }))
+            }]
+        },
+
+        options: {
+
+            responsive: true,
+            maintainAspectRatio: false,
+
+            scales: {
+
+                x: {
+                    title: {
+                        display: true,
+                        text: "Living Area (sqft)",
+                        color: "#ffffff"
+                    },
+                    ticks: {
+                        color: "#b8c7dd"
+                    }
+                },
+
+                y: {
+                    title: {
+                        display: true,
+                        text: "Price (USD)",
+                        color: "#ffffff"
+                    },
+
+                    ticks: {
+                        color: "#b8c7dd",
+                        callback: value =>
+                            formatCurrency(value)
+                    }
+                }
+            }
+        }
+    });
+}
+
+
+function createCityChart(data) {
+
+    new Chart(document.getElementById("cityChart"), {
+
+        type: "bar",
+
+        data: {
+
+            labels: data.map(item => item.city),
+
+            datasets: [{
+                label: "Average Price",
+                data: data.map(item => item.price)
+            }]
+        },
+
+        options: {
+
+            indexAxis: "y",
+
+            responsive: true,
+            maintainAspectRatio: false,
+
+            scales: {
+
+                x: {
+                    ticks: {
+                        color: "#b8c7dd",
+                        callback: value =>
+                            formatCurrency(value)
+                    }
+                },
+
+                y: {
+                    ticks: {
+                        color: "#b8c7dd"
+                    }
+                }
+            }
+        }
+    });
+}
+
+
+function createCorrelationChart(data) {
+
+    new Chart(document.getElementById("correlationChart"), {
+
+        type: "bar",
+
+        data: {
+
+            labels: data.map(item => item.feature),
+
+            datasets: [{
+                label: "Correlation with Price",
+                data: data.map(item => item.correlation)
+            }]
+        },
+
+        options: {
+
+            indexAxis: "y",
+
+            responsive: true,
+            maintainAspectRatio: false,
+
+            scales: {
+
+                x: {
+                    min: -1,
+                    max: 1,
+                    ticks: {
+                        color: "#b8c7dd"
+                    }
+                },
+
+                y: {
+                    ticks: {
+                        color: "#b8c7dd"
+                    }
+                }
+            }
+        }
+    });
+}
+
+
+/* ================= PAGE LOAD ================= */
+
+window.addEventListener("load", function() {
+
+    displayHistory();
+
+    loadAnalytics();
+
+});
+
+</script>
+
+</body>
+</html>
