@@ -125,6 +125,4 @@ http://127.0.0.1:5000
 
 ## 📸 Project Screenshot
 
-![House Price Prediction App](home.jpg) dependencies
-- 📄 `README.md` — Project documentation
-- 🖼️ `home.jpg` — Project screenshot
+![House Price Prediction App](home.jpg)
