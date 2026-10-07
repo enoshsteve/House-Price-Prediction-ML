@@ -29,4 +29,4 @@ The project also includes a Flask web application where users can interact with 
 
 ## 📸 Project Screenshot
 
-![House Price Prediction App](home.png)
+![House Price Prediction App](home.jpg)
