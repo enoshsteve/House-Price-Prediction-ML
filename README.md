@@ -80,3 +80,26 @@ The Linear Regression model achieved the highest R² score and was selected as t
 ## 📸 Project Screenshot
 
 ![House Price Prediction App](home.jpg)
+
+
+## ▶️ How to Run
+
+### 1. Clone the repository
+
+git clone https://github.com/enoshsteve/House-Price-Prediction-ML.git
+
+### 2. Open the project
+
+cd House-Price-Prediction-ML
+
+### 3. Install dependencies
+
+pip install -r requirements.txt
+
+### 4. Run the Flask application
+
+python app\app.py
+
+### 5. Open in browser
+
+http://127.0.0.1:5000
