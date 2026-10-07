@@ -104,10 +104,7 @@ python app\app.py
 
 http://127.0.0.1:5000
 
-
-So GitHub editor-la visually இப்படித்தான் இருக்கணும்:
-
-**Project Structure**
+###Project Structure
 
 House-Price-Prediction-ML/
 │
@@ -131,3 +128,11 @@ House-Price-Prediction-ML/
 ├── requirements.txt
 ├── README.md
 └── home.jpg
+
+###Description
+
+app/ → Flask web application
+dataset/ → House price dataset
+model/ → Trained Machine Learning model
+train_model.py → Trains and evaluates ML models
+requirements.txt → Python dependencies
